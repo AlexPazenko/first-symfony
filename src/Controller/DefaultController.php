@@ -22,7 +22,7 @@ class DefaultController extends AbstractController
 
     }
     /**
-     * @Route("/", name="default")
+     * @Route("/home", name="default", name="home")
      */
     public function index(GiftsService $gifts, Request $request, SessionInterface $session)
     {
@@ -154,5 +154,8 @@ class DefaultController extends AbstractController
     {
        exit('Test controller forwarding - '.$param);
     }
+
+
+
 }
 

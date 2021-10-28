@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DefaultController!{% endblock %}
+{% block title %}Hello {{ controller_name }}!!!{% endblock %}
+
+{% set users = [{name: 'John'}, {name: 'Susan'}, {name: 'Robert'}] %}
+
+{% set string = "some string \n from \n database" %}
 
 {% block body %}
 <style>
@@ -9,7 +13,7 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Hello {{ controller_name| upper }}! ✅</h1>
 
     This friendly message is coming from:
     <ul>
@@ -35,12 +39,28 @@
         {% endfor %}
     {% endfor %}
 
+    {% for user in users %}
+
+        <p>{{ user.name }}</p>
+
+    {% endfor %}
+
+    {{ path('home') }} <br>
+    {{ url('home') }} <br>
+    {{ asset('images/logo.php') }} <br>
+    {{ absolute_url(asset('images/small_bird.jpg')) }} <br>
+
+    <img src="{{ absolute_url(asset('images/small_bird.jpg')) }}" alt="Symfony 4 course">
+
+    <p>The google tracking code is: {{ ga_code }}</p>
+
 </div>
 {% endblock %}
 
 {% block javascripts %}
-   {# <script>
-      alert(1);</script>#}
 
-    {#{{ encore_entry_script_tags('app') }}#}
+    <script>
+/*    var route = "{{ string|escape('js') }}";
+    console.log(route);*/
+    </script>
 {% endblock %}
