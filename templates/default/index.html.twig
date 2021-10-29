@@ -20,7 +20,7 @@
         <li>Your controller at <code><a href="{{ '/home/apazenko/sites/Lectorium/symfony/first_symfony/src/Controller/DefaultController.php'|file_link(0) }}">src/Controller/DefaultController.php</a></code></li>
         <li>Your template at <code><a href="{{ '/home/apazenko/sites/Lectorium/symfony/first_symfony/templates/default/index.html.twig'|file_link(0) }}">templates/default/index.html.twig</a></code></li>
     </ul>
-    <ul>
+   {# <ul>
         {% for user in users %}
             <li>{{ user.name }} - you won {{ random_gift[loop.index0] }}</li>
         {% endfor %}
@@ -37,30 +37,39 @@
                 {{ message }}
             </div>
         {% endfor %}
-    {% endfor %}
+    {% endfor %}#}
 
-    {% for user in users %}
+{#    {% for user in users %}
 
         <p>{{ user.name }}</p>
 
-    {% endfor %}
+    {% endfor %}#}  {# users loop #}
 
-    {{ path('home') }} <br>
+    {#{{ path('home') }} <br>
     {{ url('home') }} <br>
     {{ asset('images/logo.php') }} <br>
-    {{ absolute_url(asset('images/small_bird.jpg')) }} <br>
+    {{ absolute_url(asset('images/small_bird.jpg')) }} <br>#}
 
-    <img src="{{ absolute_url(asset('images/small_bird.jpg')) }}" alt="Symfony 4 course">
+    {#<img src="{{ absolute_url(asset('images/small_bird.jpg')) }}" alt="Symfony 4 course">#} {# add image using absolute_url #}
 
-    <p>The google tracking code is: {{ ga_code }}</p>
+    {#<p>The google tracking code is: {{ ga_code }}</p>#}  {#  we are using global variables #}
+
+
+    {#{{ app.user }}#}
+    {#{{ app.request.get('param')}}#}
+    {#{{ app.environment }}#}
+   {# {{ dump(app.session) }}#}
+
+{#    {{ render(controller(
+        'App\\Controller\\DefaultController::mostPopularPosts',
+        { 'number': 2 }
+    )) }}#} {# add new conroller method which add new view (most_popular_posts.html.twig) #}
 
 </div>
 {% endblock %}
 
 {% block javascripts %}
 
-    <script>
-/*    var route = "{{ string|escape('js') }}";
-    console.log(route);*/
-    </script>
+      {{ parent() }}
+
 {% endblock %}

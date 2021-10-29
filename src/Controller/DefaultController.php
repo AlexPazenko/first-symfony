@@ -27,7 +27,7 @@ class DefaultController extends AbstractController
     public function index(GiftsService $gifts, Request $request, SessionInterface $session)
     {
 
-        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        /*$users = $this->getDoctrine()->getRepository(User::class)->findAll();
 
         if (!$users) {
             throw $this->createNotFoundException('The user do not exist');
@@ -48,7 +48,26 @@ class DefaultController extends AbstractController
             'controller_name' => 'DefaultController',
             'users' => $users,
             'random_gift' => $gifts->gifts,
+        ]);*/
+
+       /* $entityManager = $this->getDoctrine()->getManager();
+        $user = new User();
+        $user->setName('Robert');
+        $entityManager->persist($user);
+        $entityManager->flush();
+        dump('A new user was saved with the id of '. $user->getId());*/
+
+        $repository = $this->getDoctrine()->getRepository(User::class);
+
+        $user = $repository->find(1);
+
+        dump($user);
+
+        return $this->render('default/index.html.twig', [
+            'controller_name' => 'DefaultController',
+
         ]);
+
     }
 
     /**
@@ -149,13 +168,20 @@ class DefaultController extends AbstractController
     /**
      * @Route("/url-to-forward-to/{param?}", name="rout_to_forward_to")
      */
-
     public function methodToForwardTo($param)
     {
        exit('Test controller forwarding - '.$param);
     }
 
 
+    public function mostPopularPosts ($number = 3)
+    {
+        //database call:
+        $posts = ['post 1', 'post 2', 'post 3', 'post 4' ];
+        return $this->render('default/most_popular_posts.html.twig', [
+            'posts' => $posts,
+        ]);
+    }
 
 }
 
