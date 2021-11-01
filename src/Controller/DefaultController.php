@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
+use App\Entity\Video;
+use App\Entity\Address;
 use App\Services\GiftsService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,25 +52,123 @@ class DefaultController extends AbstractController
             'random_gift' => $gifts->gifts,
         ]);*/
 
+        /* $entityManager = $this->getDoctrine()->getManager();
+          $user = new User();
+          $user->setName('Robert');
+          $entityManager->persist($user);
+          $entityManager->flush();
+          dump('A new user was saved with the id of '. $user->getId());*/
+
+         /* ---get users ---*/
+        /*$repository = $this->getDoctrine()->getRepository(User::class);*/
+        /*$user = $repository->find(1);*/
+        /*$user = $repository->findOneBy(['name' => 'Robert', 'id' => '3']);*/
+//        $user = $repository->findBy(['name' => 'Robert'],['id' => 'DESC']);
+        /*$users = $repository->findAll();
+        dump($users);*/
+
+        /* ---update users ---*/
+        /*$entityManager = $this->getDoctrine()->getManager();
+        $id = 1;
+        $user = $entityManager->getRepository(User::class)->find($id);
+
+        if (!$user)
+        {
+            throw $this->createNotFoundException(
+                'No user found for id ' .$id
+            );
+        }
+        $user->setName('New user name');
+        $entityManager->flush();
+        dump($user);*/
+
+        /* --- delete users --- */
+        /*$entityManager = $this->getDoctrine()->getManager();
+        $id = 3;
+        $user = $entityManager->getRepository(User::class)->find($id);
+        $entityManager->remove($user);
+        $entityManager->flush();
+        dump($user);*/
+
+        /* --- delete users --- */
+        /*$entityManager = $this->getDoctrine()->getManager();
+        $conn = $entityManager->getConnection();
+
+        $sql = '
+        SELECT * FROM user u
+        WHERE u.id > :id
+        ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(['id' => 3]);*/
+
+        /*$result = $stmt->fetchAll();
+        dump($result);*/
+        /*dump($stmt->fetchAll());*/
+
        /* $entityManager = $this->getDoctrine()->getManager();
-        $user = new User();
-        $user->setName('Robert');
+        $user = new User;
+        $user->setName('Bill');
+        for($i=1; $i <= 2; $i++)
+        {
+            $video = new Video();
+            $video->setTitle('Video title -' . $i);
+            $user->addVideo($video);
+            $entityManager->persist($video);
+        }
         $entityManager->persist($user);
         $entityManager->flush();
-        dump('A new user was saved with the id of '. $user->getId());*/
 
-        $repository = $this->getDoctrine()->getRepository(User::class);
+        dump('Created a video with the id of ' . $video->getId());
+        dump('Created a user with the id of ' . $user->getId());*/
 
-        $user = $repository->find(1);
 
+        /*$video = $this->getDoctrine()->getRepository(Video::class)->find(1);
+        dump($video->getUser()->getName());*/
+
+        /*$user = $this->getDoctrine()->getRepository(User::class)->find(1);
         dump($user);
+        foreach($user->getVideos() as $video)
+        {
+            dump($video->getTitle());
+        }*/
+
+        /*$entityManager = $this->getDoctrine()-> getManager();
+        $user = $this->getDoctrine()->getRepository(User::class)->find(1);
+        $entityManager->remove($user);
+        $entityManager->flush();
+        dump($user);*/
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $user = new User();
+        $user->setName('John');
+        $address = new Address();
+        $address->setStreet('street');
+        $address->setNumber(23);
+        $user->setAddress($address);
+        $entityManager->persist($user);
+        $entityManager->persist($address);
+        $entityManager->flush();
+
+        dump($user->getAddress()->getStreet());
 
         return $this->render('default/index.html.twig', [
             'controller_name' => 'DefaultController',
 
         ]);
-
     }
+    /**
+     * @Route("/home/{id}", name="default", name="home22")
+     */
+    /*public function index22(Request $request, User $user)
+    {
+
+        dump($user);
+
+        return $this->render('default/index.html.twig', [
+            'controller_name' => 'DefaultController'
+        ]);
+    }*/
 
     /**
      * @Route("/default3/", name="default2")
