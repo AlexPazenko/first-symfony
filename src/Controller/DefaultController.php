@@ -29,28 +29,29 @@ class DefaultController extends AbstractController
     public function index(GiftsService $gifts, Request $request, SessionInterface $session)
     {
 
-        /*$users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
 
-        if (!$users) {
+        /*if (!$users) {
             throw $this->createNotFoundException('The user do not exist');
-        }
+        }*/
 
-        $this->addFlash(
-            'notice',
-            'Your changes were saved!'
-        );
+        /* $this->addFlash(
+             'notice',
+             'Your changes were saved!'
+         );
 
-        $this->addFlash(
-            'warning',
-            'Your changes were saved!'
-        );
+         $this->addFlash(
+             'warning',
+             'Your changes were saved!'
+         );*/
 
+        dump('8888');
 
-        return $this->render('default/index.html.twig', [
-            'controller_name' => 'DefaultController',
-            'users' => $users,
-            'random_gift' => $gifts->gifts,
-        ]);*/
+         return $this->render('default/index.html.twig', [
+             'controller_name' => 'DefaultController',
+             'users' => $users,
+             'random_gift' => $gifts->gifts,
+         ]);
 
         /* $entityManager = $this->getDoctrine()->getManager();
           $user = new User();
@@ -138,8 +139,7 @@ class DefaultController extends AbstractController
         $entityManager->flush();
         dump($user);*/
 
-        $entityManager = $this->getDoctrine()->getManager();
-
+        /*$entityManager = $this->getDoctrine()->getManager();
         $user = new User();
         $user->setName('John');
         $address = new Address();
@@ -150,12 +150,53 @@ class DefaultController extends AbstractController
         $entityManager->persist($address);
         $entityManager->flush();
 
-        dump($user->getAddress()->getStreet());
+        dump($user->getAddress()->getStreet());*/
 
-        return $this->render('default/index.html.twig', [
-            'controller_name' => 'DefaultController',
+        /*$entityManager = $this->getDoctrine()->getManager();
+        $user6 = $this->getDoctrine()->getRepository(User::class)->find(6);*/
+        /*for ($i = 1; $i<=3; $i++)
+        {
+            $user = new User();
+            $user->setName('Billy-Bob');
+            $entityManager->persist($user);
+        }
+        $entityManager->flush();
+        dump('Last user id - '. $user->getId());*/
+/*
+        $user6 = $entityManager->getRepository(User::class)->find(6);
+        $user7 = $entityManager->getRepository(User::class)->find(7);
+        $user8 = $entityManager->getRepository(User::class)->find(8);*/
 
-        ]);
+        /* $user6->addFollowed($user7);
+         $user6->addFollowed($user8);
+         $entityManager->flush();*/
+
+        /*dump($user6->getFollowed()->count());
+        dump($user6->getFollowing()->count());
+        dump($user7->getFollowing()->count());*/
+
+        /*$entityManager = $this->getDoctrine()->getManager();*/
+
+        /*$user = new User();
+        $user->setName('Billy-Bob');
+
+        for ($i=1; $i<=3; $i++)
+        {
+            $video = new Video();
+            $video->setTitle('Video title - '.$i);
+            $user->addVideo($video);
+            $entityManager->persist($video);
+        }
+        $entityManager->persist($user);
+        $entityManager->flush();*/
+
+        /*$user = $entityManager->getRepository(User::class)->findWithVideos(1);
+        dump($user);*/
+
+//        return $this->render('default/index.html.twig', [
+//            'controller_name' => 'DefaultController',
+//
+//        ]);
     }
     /**
      * @Route("/home/{id}", name="default", name="home22")
