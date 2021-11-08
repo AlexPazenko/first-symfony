@@ -7,14 +7,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
-use App\Entity\Video;
-use App\Entity\Address;
 use App\Services\GiftsService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use App\Entity\Author;
+use App\Entity\File;
+use App\Entity\Pdf;
+use App\Entity\Video;
 
 class DefaultController extends AbstractController
 {
@@ -29,7 +31,8 @@ class DefaultController extends AbstractController
     public function index(GiftsService $gifts, Request $request, SessionInterface $session)
     {
 
-        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+
+        /*$users = $this->getDoctrine()->getRepository(User::class)->findAll();*/
 
         /*if (!$users) {
             throw $this->createNotFoundException('The user do not exist');
@@ -46,6 +49,19 @@ class DefaultController extends AbstractController
          );*/
 
         dump('8888');
+        $entityManager = $this->getDoctrine()->getManager();
+        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+
+        $author = $entityManager->getRepository(Author::class)->findByIdWithPdf(1);
+        dump($author);
+
+        foreach($author->getFiles() as $file)
+        {
+            /*if ($file instanceof Pdf)
+            {*/
+            dump($file->getFileName());
+           /* }*/
+        }
 
          return $this->render('default/index.html.twig', [
              'controller_name' => 'DefaultController',

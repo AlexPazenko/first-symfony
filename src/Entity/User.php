@@ -40,10 +40,6 @@ class User
      */
     private $videos;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
-     */
-    private $address;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="following")
@@ -105,18 +101,6 @@ class User
                 $video->setUser(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getAddress(): ?Address
-    {
-        return $this->address;
-    }
-
-    public function setAddress(?Address $address): self
-    {
-        $this->address = $address;
 
         return $this;
     }

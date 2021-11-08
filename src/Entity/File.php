@@ -7,6 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=FileRepository::class)
+ * @ORM\InheritanceType("JOINED")
+ * @ORM\DiscriminatorColumn(name="type", type="string")
+ * @ORM\DiscriminatorMap({"video" = "Video", "pdf" = "Pdf"})
  */
 abstract class File
 {
@@ -47,7 +50,7 @@ abstract class File
         return $this->filename;
     }
 
-    public function setFilename(string $filename): self
+    public function setFileName(string $filename): self
     {
         $this->filename = $filename;
 
