@@ -17,6 +17,7 @@ use App\Entity\Author;
 use App\Entity\File;
 use App\Entity\Pdf;
 use App\Entity\Video;
+use App\Services\MyService;
 
 class DefaultController extends AbstractController
 {
@@ -28,7 +29,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/home", name="default", name="home")
      */
-    public function index(GiftsService $gifts, Request $request, SessionInterface $session)
+    public function index(GiftsService $gifts, Request $request, SessionInterface $session, MyService $service)
     {
 
 
@@ -48,12 +49,13 @@ class DefaultController extends AbstractController
              'Your changes were saved!'
          );*/
 
-        dump('8888');
         $entityManager = $this->getDoctrine()->getManager();
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
 
         $author = $entityManager->getRepository(Author::class)->findByIdWithPdf(1);
         dump($author);
+        $service->someAction();
+        $service->someSecondAction();
 
         foreach($author->getFiles() as $file)
         {
@@ -297,7 +299,7 @@ class DefaultController extends AbstractController
     public function download()
     {
         $path = $this->getParameter('download_directory');
-        return $this->file($path.'small_bird.jpg');
+        return $this->file($path.'images/small_bird.jpg');
     }
 
 
