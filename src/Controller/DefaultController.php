@@ -17,9 +17,13 @@ use App\Entity\Author;
 use App\Entity\File;
 use App\Entity\Pdf;
 use App\Entity\Video;
-use App\Services\MyService;
+use App\Services\ServiceInterface;
 use App\Services\MySecondService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\Cache\Adapter\TagAwareAdapter;
+
+
 
 class DefaultController extends AbstractController
 {
@@ -31,7 +35,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/home", name="default", name="home")
      */
-    public function index(GiftsService $gifts, Request $request, SessionInterface $session, MyService $service,
+    public function index(GiftsService $gifts, Request $request, SessionInterface $session, ServiceInterface $service,
                           ContainerInterface $container)
     {
 
@@ -52,14 +56,14 @@ class DefaultController extends AbstractController
              'Your changes were saved!'
          );*/
 
-        $entityManager = $this->getDoctrine()->getManager();
+        /*$entityManager = $this->getDoctrine()->getManager();*/
         /*$users = $this->getDoctrine()->getRepository(User::class)->findAll();*/
 
-        $user = $entityManager->getRepository(User::class)->find(1);
-        /*$user = new User();*/
-        $user->setName('Robert');
+       /* $user = $entityManager->getRepository(User::class)->find(1);*/
+       /* $user = new User();*/
+       /* $user->setName('Robert');
         $entityManager->persist($user);
-        $entityManager->flush();
+        $entityManager->flush();*/
 
         /*dump($container->get('app.myservice'));*/
 
@@ -75,6 +79,75 @@ class DefaultController extends AbstractController
             dump($file->getFileName());
             }
         }*/
+
+/*
+        $cache = new FilesystemAdapter();
+        $posts = $cache->getItem('database.get_posts');
+
+        if (!$posts->isHit())
+        {
+            $posts_from_db = ['post1', 'post2', 'post3'];
+            dump('connected with database ...');
+            $posts->set(serialize($posts_from_db));
+            $posts->expiresAfter(5);
+            $cache->save($posts);
+        }
+
+        $cache->clear();
+        dump(unserialize($posts->get()));*/
+
+        $cache = new TagAwareAdapter(
+
+            new FilesystemAdapter()
+        );
+
+        $acer = $cache->getItem('acer');
+        $dell = $cache->getItem('dell');
+        $ibm = $cache->getItem('ibm');
+        $apple = $cache->getItem('apple');
+
+        if (!$acer->isHit())
+        {
+            $acer_from_db = 'acer laptop';
+            $acer->set($acer_from_db);
+            $acer->tag(['computers', 'laptop', 'acer']);
+            $cache->save($acer);
+            dump('acer laptop from database ... ');
+        }
+
+
+        if (!$dell->isHit())
+        {
+            $dell_from_db = 'dell laptop';
+            $dell->set($dell_from_db);
+            $dell->tag(['computers', 'laptop', 'dell']);
+            $cache->save($dell);
+            dump('dell laptop from database ... ');
+        }
+
+
+        if (!$ibm->isHit())
+        {
+            $ibm_from_db = 'ibm desktop';
+            $ibm->set($ibm_from_db);
+            $ibm->tag(['computers', 'desktops', 'ibm']);
+            $cache->save($ibm);
+            dump('ibm laptop from database ... ');
+        }
+
+        if (!$apple->isHit())
+        {
+            $apple_from_db = 'apple desktop';
+            $apple->set($apple_from_db);
+            $apple->tag(['computers', 'desktops', 'apple']);
+            $cache->save($apple);
+            dump('apple laptop from database ... ');
+        }
+
+        dump($acer->get());
+        dump($dell->get());
+        dump($ibm->get());
+        dump($apple->get());
 
          return $this->render('default/index.html.twig', [
              'controller_name' => 'DefaultController',

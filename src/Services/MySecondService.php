@@ -1,12 +1,11 @@
 <?php
 namespace App\Services;
 
-class MySecondService
+class MySecondService implements ServiceInterface
 {
     public function __construct()
     {
-        dump('from second service');
-        $this->doSomething();
+        dump('hello from MySecondService');
     }
 
     public function doSomething()
