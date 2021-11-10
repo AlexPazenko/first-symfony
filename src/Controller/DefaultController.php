@@ -18,6 +18,8 @@ use App\Entity\File;
 use App\Entity\Pdf;
 use App\Entity\Video;
 use App\Services\MyService;
+use App\Services\MySecondService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DefaultController extends AbstractController
 {
@@ -29,7 +31,8 @@ class DefaultController extends AbstractController
     /**
      * @Route("/home", name="default", name="home")
      */
-    public function index(GiftsService $gifts, Request $request, SessionInterface $session, MyService $service)
+    public function index(GiftsService $gifts, Request $request, SessionInterface $session, MyService $service,
+                          ContainerInterface $container)
     {
 
 
@@ -50,25 +53,33 @@ class DefaultController extends AbstractController
          );*/
 
         $entityManager = $this->getDoctrine()->getManager();
-        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        /*$users = $this->getDoctrine()->getRepository(User::class)->findAll();*/
 
-        $author = $entityManager->getRepository(Author::class)->findByIdWithPdf(1);
-        dump($author);
-        $service->someAction();
-        $service->someSecondAction();
+        $user = $entityManager->getRepository(User::class)->find(1);
+        /*$user = new User();*/
+        $user->setName('Robert');
+        $entityManager->persist($user);
+        $entityManager->flush();
 
-        foreach($author->getFiles() as $file)
+        /*dump($container->get('app.myservice'));*/
+
+        /*$author = $entityManager->getRepository(Author::class)->findByIdWithPdf(1);
+        dump($author);*/
+        /*$service->someAction();
+        $service->someSecondAction();*/
+
+        /*foreach($author->getFiles() as $file)
         {
-            /*if ($file instanceof Pdf)
-            {*/
+            if ($file instanceof Pdf)
+            {
             dump($file->getFileName());
-           /* }*/
-        }
+            }
+        }*/
 
          return $this->render('default/index.html.twig', [
              'controller_name' => 'DefaultController',
-             'users' => $users,
-             'random_gift' => $gifts->gifts,
+             /*'users' => $users,
+             'random_gift' => $gifts->gifts,*/
          ]);
 
         /* $entityManager = $this->getDoctrine()->getManager();

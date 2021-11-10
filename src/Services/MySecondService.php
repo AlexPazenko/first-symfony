@@ -18,4 +18,9 @@ class MySecondService
     {
         return 'wow!';
     }
+
+    public function someMethod()
+    {
+        return "Hello!";
+    }
 }
