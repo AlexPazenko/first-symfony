@@ -143,11 +143,14 @@ class DefaultController extends AbstractController
             $cache->save($apple);
             dump('apple laptop from database ... ');
         }
-
+        /*$cache->invalidateTags(['ibm']);*/
+//        $cache->invalidateTags(['desktops']);
+        $cache->invalidateTags(['computers']);
         dump($acer->get());
         dump($dell->get());
         dump($ibm->get());
         dump($apple->get());
+
 
          return $this->render('default/index.html.twig', [
              'controller_name' => 'DefaultController',
