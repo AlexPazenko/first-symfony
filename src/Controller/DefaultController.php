@@ -22,15 +22,22 @@ use App\Services\MySecondService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
+use App\Events\VideoCreatedEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 
 
 class DefaultController extends AbstractController
 {
 
-    public function __construct($logger)
+   /* public function __construct($logger)
     {
 
+    }*/
+
+    public function __construct(EventDispatcherInterface $dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
     }
     /**
      * @Route("/home", name="default", name="home")
@@ -80,7 +87,7 @@ class DefaultController extends AbstractController
             }
         }*/
 
-/*
+/*     // -------  Caching ----- //
         $cache = new FilesystemAdapter();
         $posts = $cache->getItem('database.get_posts');
 
@@ -96,7 +103,7 @@ class DefaultController extends AbstractController
         $cache->clear();
         dump(unserialize($posts->get()));*/
 
-        $cache = new TagAwareAdapter(
+       /* $cache = new TagAwareAdapter(
 
             new FilesystemAdapter()
         );
@@ -143,14 +150,15 @@ class DefaultController extends AbstractController
             $cache->save($apple);
             dump('apple laptop from database ... ');
         }
-        /*$cache->invalidateTags(['ibm']);*/
-//        $cache->invalidateTags(['desktops']);
+        $cache->invalidateTags(['ibm']);
         $cache->invalidateTags(['computers']);
         dump($acer->get());
         dump($dell->get());
         dump($ibm->get());
-        dump($apple->get());
+        dump($apple->get());*/
 
+        $video = new \stdClass();
+        $video->title = 'Fanny movie';
 
          return $this->render('default/index.html.twig', [
              'controller_name' => 'DefaultController',
