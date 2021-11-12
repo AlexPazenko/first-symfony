@@ -30,7 +30,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class DefaultController extends AbstractController
 {
 
-   /* public function __construct($logger)
+ /*   public function __construct($logger)
     {
 
     }*/
@@ -159,6 +159,10 @@ class DefaultController extends AbstractController
 
         $video = new \stdClass();
         $video->title = 'Fanny movie';
+        $video->category = 'fanny';
+
+        $event = new VideoCreatedEvent($video);
+        $this->dispatcher->dispatch('video.created.event', $event  );
 
          return $this->render('default/index.html.twig', [
              'controller_name' => 'DefaultController',
