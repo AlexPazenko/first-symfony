@@ -33,6 +33,21 @@ class Music
      */
     private $created_at;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\File(
+     * maxSize = "10240k",
+     * mimeTypes={"video/mp4", "application/pdf", "application/x-pdf"},
+     * mimeTypesMessage="Please uploade a valid video"
+     * )
+     */
+    private $file;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=SecurityUser::class, inversedBy="music")
+     */
+    private $securityUser;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -58,6 +73,30 @@ class Music
     public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getFile(): ?string
+    {
+        return $this->file;
+    }
+
+    public function setFile(string $file): self
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    public function getSecurityUser(): ?SecurityUser
+    {
+        return $this->securityUser;
+    }
+
+    public function setSecurityUser(?SecurityUser $securityUser): self
+    {
+        $this->securityUser = $securityUser;
 
         return $this;
     }

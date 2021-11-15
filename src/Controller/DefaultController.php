@@ -27,8 +27,10 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use App\Events\VideoCreatedEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use App\Form\MusicFormType;
-
-
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\Entity\SecurityUser;
+use App\Form\RegisterUserType;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 
 class DefaultController extends AbstractController
@@ -46,7 +48,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/home", name="default", name="home")
      */
-    public function index(Request $request)
+    public function index(Request $request, \Swift_Mailer $mailer, UserPasswordEncoderInterface $passwordEncoder)
     {
 
         /*public function index(GiftsService $gifts, Request $request, SessionInterface $session, ServiceInterface $service,
@@ -170,12 +172,13 @@ class DefaultController extends AbstractController
 //        $this->dispatcher->dispatch('video.created.event', $event  );
         $this->dispatcher->dispatch( $event  );*/
 
-        $entityManager = $this->getDoctrine()->getManager();
+
+
+        /*     // -------  Form creating ----- // */
+/*        $entityManager = $this->getDoctrine()->getManager();
         $music = $entityManager->getRepository(Music::class)->findAll();
         dump($music);
         $music = new Music();
-/*        $music->setTitle('Write a blog post');
-        $music->setCreatedAt(new \DateTime('tomorrow'));*/
 
 //        $music = $entityManager->getRepository(Music::class)->find(1);
 
@@ -183,17 +186,24 @@ class DefaultController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid())
         {
+            $file = $form->get('file')->getData();
+            $fileName = sha1(random_bytes(14)).'.'.$file->guessExtension();
+            $file->move(
+                $this->getParameter('music_directory'),
+                $fileName
+            );
+            $music->setFile($fileName);
             $entityManager->persist($music);
             $entityManager->flush();
             return $this->redirectToRoute('home');
         }
 
-         return $this->render('default/index.html.twig', [
+
+             return $this->render('default/index.html.twig', [
              'controller_name' => 'DefaultController',
              'form' => $form->createView(),
-             /*'users' => $users,
-             'random_gift' => $gifts->gifts,*/
-         ]);
+        ]);
+*/
 
         /* $entityManager = $this->getDoctrine()->getManager();
           $user = new User();
@@ -339,7 +349,71 @@ class DefaultController extends AbstractController
 //            'controller_name' => 'DefaultController',
 //
 //        ]);
+
+
+        /* --- sending an email --- */
+        /*$message = (new \Swift_Message('Hello Email'))
+            ->setFrom('send@example.com')
+            ->setTo('recipient@example.com')
+            ->setBody(
+                $this->renderView(
+                    'emails/registration.html.twig',
+                    array('name' => 'Robert')
+                ),
+                'text/html'
+            );
+        $mailer->send($message);
+
+        return $this->render('default/index.html.twig', [
+            'controller_name' => 'DefaultController',
+
+        ]);*/
+
+
+        /* --- user form --- */
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $users = $entityManager->getRepository(SecurityUser::class)->findAll();
+        dump($users);
+
+        $user = new SecurityUser();
+        $form = $this->createForm(RegisterUserType::class, $user);
+         $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $user->setPassword(
+                $passwordEncoder->encodePassword($user, $form->get('password')->getData())
+            );
+            $user->setEmail($form->get('email')->getData());
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+            return $this->redirectToRoute('home');
+        }
+        return $this->render('default/index.html.twig', [
+            'controller_name' => 'DefaultController',
+            'form' => $form->createView(),
+
+        ]);
     }
+
+    /**
+     * @Route("/login", name="login")
+     *
+     */
+    public function login(AuthenticationUtils $authenticationUtils)
+    {
+        $error = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render('security/login.html.twig', array(
+            'controller_name' => 'DefaultController',
+            'error' => $error,
+
+        ));
+    }
+
     /**
      * @Route("/home/{id}", name="default", name="home22")
      */
