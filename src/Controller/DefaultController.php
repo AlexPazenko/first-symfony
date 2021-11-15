@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 /*use http\Cookie;*/
+
+use App\Entity\Music;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,6 +26,8 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use App\Events\VideoCreatedEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use App\Form\MusicFormType;
+
 
 
 
@@ -42,10 +46,11 @@ class DefaultController extends AbstractController
     /**
      * @Route("/home", name="default", name="home")
      */
-    public function index(GiftsService $gifts, Request $request, SessionInterface $session, ServiceInterface $service,
-                          ContainerInterface $container)
+    public function index(Request $request)
     {
 
+        /*public function index(GiftsService $gifts, Request $request, SessionInterface $session, ServiceInterface $service,
+                              ContainerInterface $container)*/
 
         /*$users = $this->getDoctrine()->getRepository(User::class)->findAll();*/
 
@@ -157,15 +162,35 @@ class DefaultController extends AbstractController
         dump($ibm->get());
         dump($apple->get());*/
 
-        $video = new \stdClass();
+        /*$video = new \stdClass();
         $video->title = 'Fanny movie';
         $video->category = 'fanny';
 
         $event = new VideoCreatedEvent($video);
-        $this->dispatcher->dispatch('video.created.event', $event  );
+//        $this->dispatcher->dispatch('video.created.event', $event  );
+        $this->dispatcher->dispatch( $event  );*/
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $music = $entityManager->getRepository(Music::class)->findAll();
+        dump($music);
+        $music = new Music();
+/*        $music->setTitle('Write a blog post');
+        $music->setCreatedAt(new \DateTime('tomorrow'));*/
+
+//        $music = $entityManager->getRepository(Music::class)->find(1);
+
+        $form = $this->createForm(MusicFormType::class, $music);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $entityManager->persist($music);
+            $entityManager->flush();
+            return $this->redirectToRoute('home');
+        }
 
          return $this->render('default/index.html.twig', [
              'controller_name' => 'DefaultController',
+             'form' => $form->createView(),
              /*'users' => $users,
              'random_gift' => $gifts->gifts,*/
          ]);

@@ -71,8 +71,14 @@ services:
     App\Services\ServiceInterface: '@App\Services\MyService'
 
 
-    App\Listeners\VideoCreatedListener:
-        tags:
-            - {name: kernel.event_listener, event: video.created.event,
-            method: onVideoCreatedEvent
-            }
+#    App\Listeners\VideoCreatedListener:
+#        tags:
+#            - {name: kernel.event_listener, event: video.created.event,
+#            method: onVideoCreatedEvent
+#            }
+
+#    App\EventSubscriber\VideoCreatedSubscriber:
+#        tags:
+#            - { name: kernel.event_listener, event: video.created.event,
+#                method: onVideoCreatedEvent
+#            }
