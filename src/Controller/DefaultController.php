@@ -31,6 +31,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Entity\SecurityUser;
 use App\Form\RegisterUserType;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 class DefaultController extends AbstractController
@@ -46,11 +47,15 @@ class DefaultController extends AbstractController
         $this->dispatcher = $dispatcher;
     }
     /**
-     * @Route("/home/{id}/delete-music", name="default", name="home")
+     * @Route("/home", name="default", name="home")
      */
-    public function index(Request $request, \Swift_Mailer $mailer, UserPasswordEncoderInterface $passwordEncoder,
-                          Music $music, File $file)
+    public function index(Request $request, \Swift_Mailer $mailer, UserPasswordEncoderInterface $passwordEncoder)
     {
+
+/*
+         * @Route("/home/{id}/delete-music", name="default", name="home")
+         * @Security("has_role('ROLE_ADMIN')")
+         */
 
         /*public function index(GiftsService $gifts, Request $request, SessionInterface $session, ServiceInterface $service,
                               ContainerInterface $container)*/
@@ -371,13 +376,20 @@ class DefaultController extends AbstractController
         ]);*/
 
 
-        /* --- user form --- */
+        /* --- redirect for unlogged users to login page --- */
+//        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+//        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+//        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
+        /* --- VOTER --- */
+       /* $entityManager = $this->getDoctrine()->getManager();
+        $music = $entityManager->getRepository(Music::class)->findAll(1);
+        $this->denyAccessUnlessGranted('MUSIC_DELETE', $music);*/
+
+        /* --- user form --- */
         $entityManager = $this->getDoctrine()->getManager();
         $users = $entityManager->getRepository(SecurityUser::class)->findAll();
         dump($users);
-        dump($music);
-        dump($file);
 
         /* --- Add ADMIN user and music --- */
         /*$user = new SecurityUser();
