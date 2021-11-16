@@ -21,12 +21,25 @@ security:
                 login_path: login
                 check_path: login
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
-
+            #csrf.token_generator:security.csrf.token_manager
                 username_parameter: 'email'
                 password_parameter: 'password'
                 csrf_token_generator: security.csrf.token_manager
+
+            logout:
+                path: /logout
+                target: /home
+
+
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 60480 #1 week in seconds
+                #always_remember_me: true
+                path: /
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
 

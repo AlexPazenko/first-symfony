@@ -46,9 +46,10 @@ class DefaultController extends AbstractController
         $this->dispatcher = $dispatcher;
     }
     /**
-     * @Route("/home", name="default", name="home")
+     * @Route("/home/{id}/delete-music", name="default", name="home")
      */
-    public function index(Request $request, \Swift_Mailer $mailer, UserPasswordEncoderInterface $passwordEncoder)
+    public function index(Request $request, \Swift_Mailer $mailer, UserPasswordEncoderInterface $passwordEncoder,
+                          Music $music, File $file)
     {
 
         /*public function index(GiftsService $gifts, Request $request, SessionInterface $session, ServiceInterface $service,
@@ -375,25 +376,51 @@ class DefaultController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $users = $entityManager->getRepository(SecurityUser::class)->findAll();
         dump($users);
+        dump($music);
+        dump($file);
 
-        $user = new SecurityUser();
-        $form = $this->createForm(RegisterUserType::class, $user);
-         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid())
-        {
-            $user->setPassword(
-                $passwordEncoder->encodePassword($user, $form->get('password')->getData())
-            );
-            $user->setEmail($form->get('email')->getData());
+        /* --- Add ADMIN user and music --- */
+        /*$user = new SecurityUser();
+        $user->setEmail('admin@admin.com');
+        $password = $passwordEncoder->encodePassword($user, 'passw');
+        $user->setPassword($password);
+        $user->setRoles(['ROLE_ADMIN']);
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-            return $this->redirectToRoute('home');
-        }
+        $music = new Music;
+        $music->setTitle('music title');
+        $music->setFile('music path');
+        $music->setCreatedAt(new \DateTime());
+        $entityManager->persist($music);
+
+        $user->addMusic($music);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        dump($user->getId());
+        dump($music->getId());*/
+
+        /*  $user = new SecurityUser();
+          $form = $this->createForm(RegisterUserType::class, $user);
+           $form->handleRequest($request);
+          if ($form->isSubmitted() && $form->isValid())
+          {
+              $user->setPassword(
+                  $passwordEncoder->encodePassword($user, $form->get('password')->getData())
+              );
+              $user->setEmail($form->get('email')->getData());
+
+              $entityManager = $this->getDoctrine()->getManager();
+              $entityManager->persist($user);
+              $entityManager->flush();
+              return $this->redirectToRoute('home');
+          }
+          return $this->render('default/index.html.twig', [
+              'controller_name' => 'DefaultController',
+              'form' => $form->createView(),
+          ]);*/
+
         return $this->render('default/index.html.twig', [
             'controller_name' => 'DefaultController',
-            'form' => $form->createView(),
 
         ]);
     }
