@@ -13,7 +13,7 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name| upper }}! ✅</h1>
+    <h1 class="class">Hello {{ controller_name| upper }}! ✅</h1>
 
     This friendly message is coming from:
     <ul>
@@ -93,7 +93,14 @@
 
     {% if app.user %}
         <a href="{{ path('logout')}}">logout</a>
+    {% else %}
+    <a href="{{ path('login') }}">awesome link</a>
     {% endif %}
+
+{#    {% trans %}
+    some.key
+    {% endtrans %}#}
+    {{ 'some.key'|trans|raw }}
 
    {# {% if is_granted('ROLE_ADMIN') %}
         <a href="....">Delete something, only admin can do this</a>

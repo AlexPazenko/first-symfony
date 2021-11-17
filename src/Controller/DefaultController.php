@@ -32,6 +32,7 @@ use App\Entity\SecurityUser;
 use App\Form\RegisterUserType;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 
 class DefaultController extends AbstractController
@@ -49,7 +50,8 @@ class DefaultController extends AbstractController
     /**
      * @Route("/home", name="default", name="home")
      */
-    public function index(Request $request, \Swift_Mailer $mailer, UserPasswordEncoderInterface $passwordEncoder)
+    public function index(Request $request, \Swift_Mailer $mailer, UserPasswordEncoderInterface $passwordEncoder,
+                          TranslatorInterface $translator)
     {
 
 /*
@@ -387,9 +389,9 @@ class DefaultController extends AbstractController
         $this->denyAccessUnlessGranted('MUSIC_DELETE', $music);*/
 
         /* --- user form --- */
-        $entityManager = $this->getDoctrine()->getManager();
+        /*$entityManager = $this->getDoctrine()->getManager();
         $users = $entityManager->getRepository(SecurityUser::class)->findAll();
-        dump($users);
+        dump($users);*/
 
         /* --- Add ADMIN user and music --- */
         /*$user = new SecurityUser();
@@ -431,6 +433,11 @@ class DefaultController extends AbstractController
               'form' => $form->createView(),
           ]);*/
 
+
+        $translated = $translator->trans('some.key');
+        dump($translated);
+        dump($request->getLocale());
+
         return $this->render('default/index.html.twig', [
             'controller_name' => 'DefaultController',
 
@@ -438,7 +445,11 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * @Route("/login", name="login")
+     * @Route({
+
+     *      "en":"/login",
+     *      "pl":"/logowanie",
+     *     }, name="login")
      *
      */
     public function login(AuthenticationUtils $authenticationUtils)
