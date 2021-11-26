@@ -100,7 +100,8 @@
 {#    {% trans %}
     some.key
     {% endtrans %}#}
-    {{ 'some.key'|trans|raw }}
+    {#{{ 'some.key'|trans|raw }}#}
+    {{ 'symfony.learning'|transchoice(count) }}
 
    {# {% if is_granted('ROLE_ADMIN') %}
         <a href="....">Delete something, only admin can do this</a>
