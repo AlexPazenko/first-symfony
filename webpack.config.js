@@ -25,6 +25,8 @@ Encore
    */
   .addEntry('js/custom', './build/js/custom.js')
   .addStyleEntry('css/custom', ['./build/css/custom.css'])
+  .addStyleEntry('css/dashboard', ['./build/css/dashboard.css'])
+  .addStyleEntry('css/login', ['./build/css/login.css'])
   //.addEntry('page1', './assets/page1.js')
   //.addEntry('page2', './assets/page2.js')
 
