@@ -23,7 +23,7 @@ class ToDoListController extends AbstractController
 
 
     /**
-     * @Route("/create-task", name="create-task" methods={"POST"})
+     * @Route("/create-task", name="create-task", methods={"POST"})
      */
     public function create(Request $request): Response
     {
@@ -39,7 +39,6 @@ class ToDoListController extends AbstractController
         $entityManager->persist($task);
         $entityManager->flush();
         return $this->redirectToRoute('to_do_list');
-
     }
 
 
