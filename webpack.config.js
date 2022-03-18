@@ -27,11 +27,12 @@ Encore
   .addStyleEntry('css/custom', ['./build/css/custom.css'])
   .addStyleEntry('css/dashboard', ['./build/css/dashboard.css'])
   .addStyleEntry('css/login', ['./build/css/login.css'])
+  .addStyleEntry('css/styles', ['./build/css/styles.css'])
   //.addEntry('page1', './assets/page1.js')
   //.addEntry('page2', './assets/page2.js')
 
   // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
-  .splitEntryChunks()
+  //.splitEntryChunks()
 
   // will require an extra script tag for runtime.js
   // but, you probably want this, unless you're building a single-page app
@@ -44,17 +45,7 @@ Encore
    * list of features, see:
    * https://symfony.com/doc/current/frontend.html#adding-more-features
    */
-  .cleanupOutputBeforeBuild()
-  .enableBuildNotifications()
-  .enableSourceMaps(!Encore.isProduction())
-  // enables hashed filenames (e.g. app.abc123.css)
-  .enableVersioning(Encore.isProduction())
 
-  // enables @babel/preset-env polyfills
-  .configureBabelPresetEnv((config) => {
-    config.useBuiltIns = 'usage';
-    config.corejs = 3;
-  })
 
 // enables Sass/SCSS support
 //.enableSassLoader()
